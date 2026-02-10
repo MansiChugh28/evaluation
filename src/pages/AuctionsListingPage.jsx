@@ -15,6 +15,9 @@ export default function AuctionsListingPage() {
     const [statusFilter, setStatusFilter] = useState('active');
     const [auctions, setAuctions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasNextPage, setHasNextPage] = useState(false);
+    const perPage = 20;
     
     // Dummy data as fallback
     const dummyAuctions = [
@@ -60,8 +63,8 @@ export default function AuctionsListingPage() {
             try {
                 // Build params object - only include status if it's not 'all'
                 const params = {
-                    page: 1,
-                    per_page: 20,
+                    page: currentPage,
+                    per_page: perPage,
                 };
                 
                 if (statusFilter !== 'all') {
@@ -70,7 +73,7 @@ export default function AuctionsListingPage() {
                 
                 const data = await auctionApi.getAuctions(params);
                 
-                const auctionsList = data?.auctions || data || [];
+                const auctionsList = data?.auctions || data?.data || data || [];
                 
                 if (Array.isArray(auctionsList) && auctionsList.length > 0) {
                     // Map API response to component format
@@ -88,9 +91,23 @@ export default function AuctionsListingPage() {
                         status: a.status || 'active',
                     }));
                     setAuctions(mappedAuctions);
+
+                    // If API provides pagination meta, use it; otherwise infer "has next"
+                    if (data?.pagination) {
+                        const { current_page, total_pages } = data.pagination;
+                        setHasNextPage(
+                            typeof total_pages === 'number' &&
+                            typeof current_page === 'number' &&
+                            current_page < total_pages
+                        );
+                    } else {
+                        // Fallback: assume there might be a next page only when we filled this one
+                        setHasNextPage(mappedAuctions.length === perPage);
+                    }
                 } else {
                     // Use dummy data if API returns empty
                     setAuctions(dummyAuctions);
+                    setHasNextPage(false);
                 }
             } catch (error) {
                 const message = extractErrorMessage(error);
@@ -99,13 +116,19 @@ export default function AuctionsListingPage() {
                 });
                 // Use dummy data as fallback on error
                 setAuctions(dummyAuctions);
+                setHasNextPage(false);
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchAuctions();
-    }, [statusFilter]);
+    }, [statusFilter, currentPage]);
+
+    // Reset to first page when filters change significantly
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [statusFilter, searchQuery]);
 
     const formatTimeRemaining = (endTime) => {
         const now = new Date();
@@ -266,6 +289,31 @@ export default function AuctionsListingPage() {
                             </CardFooter>
                         </Card>
                     ))}
+                </div>
+            )}
+
+            {/* Pagination Controls */}
+            {!isLoading && filteredAuctions.length > 0 && (
+                <div className="flex items-center justify-center gap-4 mt-6">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                    >
+                        Previous
+                    </Button>
+                    <span className="text-sm text-muted-foreground">
+                        Page <span className="font-medium">{currentPage}</span>
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage((p) => p + 1)}
+                        disabled={!hasNextPage}
+                    >
+                        Next
+                    </Button>
                 </div>
             )}
         </div>

@@ -148,28 +148,77 @@ export default function DashboardPage() {
 
     return (
         <div className="space-y-8">
-            {/* Welcome Section */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 p-8 shadow-lg">
-                <div className="relative z-10">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            {/* Welcome / Hero Section */}
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/15 via-primary/5 to-background border border-primary/20 p-8 shadow-xl">
+                <div className="relative z-10 flex flex-col gap-8">
+                    <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
                         <div>
-                            <h1 className="text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
-                                Welcome back, {user?.name || 'User'}! 👋
+                            <p className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full bg-background/30 border border-primary/20 text-primary mb-4">
+                                <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                                Live bidding experience
+                            </p>
+                            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-3 bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
+                                Welcome to <span className="text-primary">LiveBid</span>
                             </h1>
-                            <p className="text-muted-foreground text-lg">
-                                Discover amazing auctions and place your bids
+                            <p className="text-muted-foreground text-lg max-w-2xl">
+                                Experience the thrill of real-time auctions. Create lots, bid live, and win unique items
+                                on a modern, secure platform.
+                            </p>
+                            <div className="mt-6 flex flex-wrap gap-3">
+                                <Button asChild size="lg" className="rounded-full shadow-lg hover:shadow-xl">
+                                    <Link to="/auctions">
+                                        <Gavel className="mr-2 h-5 w-5" />
+                                        Browse Auctions
+                                    </Link>
+                                </Button>
+                                <Button
+                                    asChild
+                                    size="lg"
+                                    variant="outline"
+                                    className="rounded-full border-primary/40 bg-background/60 backdrop-blur"
+                                >
+                                    <Link to="/create-auction">
+                                        <PlusCircle className="mr-2 h-5 w-5" />
+                                        Create Auction
+                                    </Link>
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Feature Highlights */}
+                    <div className="grid gap-4 md:grid-cols-3">
+                        <div className="rounded-2xl border border-primary/20 bg-background/40 backdrop-blur p-4 flex flex-col gap-2">
+                            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-yellow-400/30 to-yellow-500/10 flex items-center justify-center">
+                                <Gavel className="h-5 w-5 text-yellow-500" />
+                            </div>
+                            <h3 className="font-semibold text-base">Real-Time Bidding</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Watch bids update live with WebSocket-powered, low-latency updates.
                             </p>
                         </div>
-                        <Button asChild size="lg" className="rounded-full shadow-lg hover:shadow-xl transition-all">
-                            <Link to="/create-auction">
-                                <PlusCircle className="mr-2 h-5 w-5" />
-                                Create Auction
-                            </Link>
-                        </Button>
+                        <div className="rounded-2xl border border-primary/20 bg-background/40 backdrop-blur p-4 flex flex-col gap-2">
+                            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-400/30 to-emerald-500/10 flex items-center justify-center">
+                                <DollarSign className="h-5 w-5 text-emerald-500" />
+                            </div>
+                            <h3 className="font-semibold text-base">Secure Platform</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Your bids and auctions are protected with JWT-based authentication.
+                            </p>
+                        </div>
+                        <div className="rounded-2xl border border-primary/20 bg-background/40 backdrop-blur p-4 flex flex-col gap-2">
+                            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-pink-400/30 to-pink-500/10 flex items-center justify-center">
+                                <TrendingUp className="h-5 w-5 text-pink-500" />
+                            </div>
+                            <h3 className="font-semibold text-base">Win Amazing Items</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Discover curated auctions and track what&apos;s ending soon so you never miss a deal.
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/5 blur-3xl"></div>
-                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-primary/5 blur-3xl"></div>
+                <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
+                <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
             </div>
 
             {/* Stats Cards */}

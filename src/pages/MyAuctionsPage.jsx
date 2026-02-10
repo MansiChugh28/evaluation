@@ -42,6 +42,9 @@ export default function MyAuctionsPage() {
     const [deletingAuctionId, setDeletingAuctionId] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [auctionToDelete, setAuctionToDelete] = useState(null);
+    const [activePage, setActivePage] = useState(1);
+    const [endedPage, setEndedPage] = useState(1);
+    const itemsPerPage = 6;
 
     useEffect(() => {
         const fetchMyAuctions = async () => {
@@ -102,6 +105,8 @@ export default function MyAuctionsPage() {
 
                 setActiveAuctions(apiActive);
                 setEndedAuctions(apiEnded);
+                setActivePage(1);
+                setEndedPage(1);
             } catch (error) {
                 const message = extractErrorMessage(error);
                 toast.error('Failed to load your auctions', {
@@ -368,6 +373,8 @@ export default function MyAuctionsPage() {
 
                     setActiveAuctions(apiActive);
                     setEndedAuctions(apiEnded);
+                    setActivePage(1);
+                    setEndedPage(1);
                 } catch (error) {
                     console.error('Error refreshing auctions:', error);
                 }
@@ -501,6 +508,8 @@ export default function MyAuctionsPage() {
 
                     setActiveAuctions(apiActive);
                     setEndedAuctions(apiEnded);
+                    setActivePage(1);
+                    setEndedPage(1);
                 } catch (error) {
                     console.error('Error refreshing auctions:', error);
                 }
@@ -662,11 +671,51 @@ export default function MyAuctionsPage() {
                             }
                         />
                     ) : (
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            {activeAuctions.map((auction) => (
-                                <AuctionCard key={auction.id} auction={auction} />
-                            ))}
-                        </div>
+                        <>
+                            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                                {activeAuctions
+                                    .slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage)
+                                    .map((auction) => (
+                                        <AuctionCard key={auction.id} auction={auction} />
+                                    ))}
+                            </div>
+                            {activeAuctions.length > itemsPerPage && (
+                                <div className="flex items-center justify-center gap-4 mt-6">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setActivePage((p) => Math.max(1, p - 1))}
+                                        disabled={activePage === 1}
+                                    >
+                                        Previous
+                                    </Button>
+                                    <span className="text-sm text-muted-foreground">
+                                        Page{' '}
+                                        <span className="font-medium">{activePage}</span>
+                                        {' '}of{' '}
+                                        <span className="font-medium">
+                                            {Math.ceil(activeAuctions.length / itemsPerPage)}
+                                        </span>
+                                    </span>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                            setActivePage((p) =>
+                                                p < Math.ceil(activeAuctions.length / itemsPerPage)
+                                                    ? p + 1
+                                                    : p
+                                            )
+                                        }
+                                        disabled={
+                                            activePage >= Math.ceil(activeAuctions.length / itemsPerPage)
+                                        }
+                                    >
+                                        Next
+                                    </Button>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             )}
@@ -681,11 +730,55 @@ export default function MyAuctionsPage() {
                             description="Your completed auctions will appear here"
                         />
                     ) : (
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            {endedAuctions.map((auction) => (
-                                <AuctionCard key={auction.id} auction={auction} isEnded={true} />
-                            ))}
-                        </div>
+                        <>
+                            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                                {endedAuctions
+                                    .slice((endedPage - 1) * itemsPerPage, endedPage * itemsPerPage)
+                                    .map((auction) => (
+                                        <AuctionCard
+                                            key={auction.id}
+                                            auction={auction}
+                                            isEnded={true}
+                                        />
+                                    ))}
+                            </div>
+                            {endedAuctions.length > itemsPerPage && (
+                                <div className="flex items-center justify-center gap-4 mt-6">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setEndedPage((p) => Math.max(1, p - 1))}
+                                        disabled={endedPage === 1}
+                                    >
+                                        Previous
+                                    </Button>
+                                    <span className="text-sm text-muted-foreground">
+                                        Page{' '}
+                                        <span className="font-medium">{endedPage}</span>
+                                        {' '}of{' '}
+                                        <span className="font-medium">
+                                            {Math.ceil(endedAuctions.length / itemsPerPage)}
+                                        </span>
+                                    </span>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                            setEndedPage((p) =>
+                                                p < Math.ceil(endedAuctions.length / itemsPerPage)
+                                                    ? p + 1
+                                                    : p
+                                            )
+                                        }
+                                        disabled={
+                                            endedPage >= Math.ceil(endedAuctions.length / itemsPerPage)
+                                        }
+                                    >
+                                        Next
+                                    </Button>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             )}

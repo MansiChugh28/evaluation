@@ -5,6 +5,7 @@ import { MainLayout } from './components/layout/MainLayout';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
+import LandingPage from './pages/LandingPage';
 import AuctionsListingPage from './pages/AuctionsListingPage';
 import AuctionDetailsPage from './pages/AuctionDetailsPage';
 import CreateAuctionPage from './pages/CreateAuctionPage';
@@ -28,6 +29,12 @@ function App() {
         <Routes>
             {/* Public routes */}
             <Route
+              path="/"
+              element={
+                <LandingPage />
+              }
+            />
+            <Route
               path="/login"
               element={
                 <PublicRoute>
@@ -50,7 +57,7 @@ function App() {
             
             {/* Protected routes with MainLayout */}
             <Route
-              path="/"
+              path="/dashboard"
               element={
                 <ProtectedRoute>
                   <MainLayout>
@@ -110,8 +117,8 @@ function App() {
               }
             />
             
-            {/* Default redirect to login */}
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            {/* Default redirect to home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
     </Router>
         <Toaster />

@@ -202,9 +202,16 @@ class WebSocketService {
         // Return unsubscribe function
         return () => {
             const callbacks = this.listeners.get(eventType);
+            if (!callbacks || callbacks.length === 0) {
+                return;
+            }
             const index = callbacks.indexOf(callback);
             if (index > -1) {
                 callbacks.splice(index, 1);
+            }
+            // If no callbacks left, clean up the key
+            if (callbacks.length === 0) {
+                this.listeners.delete(eventType);
             }
         };
     }

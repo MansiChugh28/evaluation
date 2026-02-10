@@ -31,10 +31,9 @@ export default function PublicRoute({ children }) {
 
     // If already authenticated, redirect to dashboard
     if (user && token) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/dashboard" replace />;
     }
 
     // User is not authenticated, render public content
     return children;
 }
-
