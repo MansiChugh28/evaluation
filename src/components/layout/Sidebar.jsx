@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { Button } from '../ui/button';
 
 const navigation = [
-    { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Auctions', href: '/auctions', icon: Gavel },
     { name: 'My Auctions', href: '/my-auctions', icon: UserCircle },
     { name: 'Create Auction', href: '/create-auction', icon: PlusCircle },
