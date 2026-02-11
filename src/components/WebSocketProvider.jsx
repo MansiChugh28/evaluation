@@ -22,7 +22,7 @@ export default function WebSocketProvider({ children }) {
         }
 
         // Get WebSocket URL from environment or use default
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://172.16.15.117:3000';
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://eddy-sane-senatorially.ngrok-free.dev';
         const wsUrl = import.meta.env.VITE_WS_URL || 
                      apiUrl.replace(/^http/, 'ws');
 

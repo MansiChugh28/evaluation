@@ -5,7 +5,7 @@ import { MainLayout } from './components/layout/MainLayout';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
-import LandingPage from './pages/LandingPage';
+import LandingPage from './pages/LandingPage.jsx';
 import AuctionsListingPage from './pages/AuctionsListingPage';
 import AuctionDetailsPage from './pages/AuctionDetailsPage';
 import CreateAuctionPage from './pages/CreateAuctionPage';

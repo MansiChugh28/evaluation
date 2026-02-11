@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://172.16.15.117:3000',
+    baseURL: import.meta.env.VITE_API_URL || 'https://eddy-sane-senatorially.ngrok-free.dev',
     headers: {
         'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true',
     },
 });
 
